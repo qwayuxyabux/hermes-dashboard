@@ -14,10 +14,11 @@ export default async function handler(req, res) {
   }
 
   async function redisSet(key, value) {
+    const body = typeof value === 'string' ? value : JSON.stringify(value);
     const r = await fetch(`${REDIS_URL}/set/${key}`, {
       method: 'POST',
-      headers: { Authorization: `Bearer ${REDIS_TOKEN}`, 'Content-Type': 'application/json' },
-      body: JSON.stringify(value)
+      headers: { Authorization: `Bearer ${REDIS_TOKEN}`, 'Content-Type': 'text/plain' },
+      body
     });
     return r.json();
   }
@@ -56,7 +57,11 @@ export default async function handler(req, res) {
     try {
       const raw = await redisGet('hermes:dashboard');
       if (!raw) return res.status(200).json({ empty: true });
-      const data = typeof raw === 'string' ? JSON.parse(raw) : raw;
+      // 處理 double-stringified：parse 到不是字串為止
+      let data = raw;
+      while (typeof data === 'string') {
+        try { data = JSON.parse(data); } catch(e) { break; }
+      }
       return res.status(200).json(data);
     } catch (err) {
       return res.status(500).json({ error: err.message });
