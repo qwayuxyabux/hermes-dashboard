@@ -14,11 +14,10 @@ export default async function handler(req, res) {
   }
 
   async function redisSet(key, value) {
-    const body = typeof value === 'string' ? value : JSON.stringify(value);
     const r = await fetch(`${REDIS_URL}/set/${key}`, {
       method: 'POST',
-      headers: { Authorization: `Bearer ${REDIS_TOKEN}`, 'Content-Type': 'text/plain' },
-      body
+      headers: { Authorization: `Bearer ${REDIS_TOKEN}`, 'Content-Type': 'application/json' },
+      body: JSON.stringify(value)
     });
     return r.json();
   }
@@ -28,12 +27,7 @@ export default async function handler(req, res) {
       headers: { Authorization: `Bearer ${REDIS_TOKEN}` }
     });
     const data = await r.json();
-    let val = data.result;
-    // Upstash 有時回傳 byte array，轉回字串
-    if (Array.isArray(val)) {
-      val = new TextDecoder().decode(new Uint8Array(val));
-    }
-    return val;
+    return data.result;
   }
 
   // ── POST：Hermes 推送 ──
@@ -62,7 +56,6 @@ export default async function handler(req, res) {
     try {
       const raw = await redisGet('hermes:dashboard');
       if (!raw) return res.status(200).json({ empty: true });
-      // raw 可能是 JSON 字串或已 parse 的物件
       const data = typeof raw === 'string' ? JSON.parse(raw) : raw;
       return res.status(200).json(data);
     } catch (err) {

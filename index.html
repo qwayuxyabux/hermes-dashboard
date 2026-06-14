@@ -8,479 +8,305 @@
 <link href="https://fonts.googleapis.com/css2?family=DM+Mono:ital,wght@0,300;0,400;0,500;1,300&family=Instrument+Serif:ital@0;1&family=Geist:wght@300;400;500;600&display=swap" rel="stylesheet">
 <style>
   :root {
-    --bg: #0a0a0b;
-    --bg2: #111113;
-    --bg3: #18181b;
-    --border: rgba(255,255,255,0.07);
-    --border2: rgba(255,255,255,0.13);
-    --text-primary: #f4f4f5;
-    --text-secondary: #a1a1aa;
-    --text-tertiary: #52525b;
-    --accent: #e4c97e;
-    --red: #f87171;
-    --green: #4ade80;
-    --blue: #60a5fa;
-    --orange: #fb923c;
-    --r: 12px;
-    --font-d: 'Instrument Serif', Georgia, serif;
-    --font-b: 'Geist', system-ui, sans-serif;
-    --font-m: 'DM Mono', monospace;
+    --bg:#0a0a0b;--bg2:#111113;--bg3:#18181b;
+    --border:rgba(255,255,255,.07);--border2:rgba(255,255,255,.13);
+    --text1:#f4f4f5;--text2:#a1a1aa;--text3:#52525b;
+    --accent:#e4c97e;--red:#f87171;--green:#4ade80;--blue:#60a5fa;--orange:#fb923c;
+    --r:12px;
+    --fd:'Instrument Serif',Georgia,serif;
+    --fb:'Geist',system-ui,sans-serif;
+    --fm:'DM Mono',monospace;
   }
-  @media (prefers-color-scheme: light) {
-    :root {
-      --bg: #fafaf9; --bg2: #f5f5f4; --bg3: #eeeeec;
-      --border: rgba(0,0,0,0.07); --border2: rgba(0,0,0,0.13);
-      --text-primary: #18181b; --text-secondary: #52525b; --text-tertiary: #a1a1aa;
-      --accent: #92701a; --red: #dc2626; --green: #16a34a; --blue: #2563eb; --orange: #ea580c;
-    }
-  }
-
-  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-  html { font-size: 16px; -webkit-text-size-adjust: 100%; }
-  body {
-    background: var(--bg); color: var(--text-primary);
-    font-family: var(--font-b); line-height: 1.6;
-    min-height: 100vh; -webkit-font-smoothing: antialiased;
-  }
-
-  .shell { max-width: 860px; margin: 0 auto; padding: 0 20px 80px; }
+  @media(prefers-color-scheme:light){:root{
+    --bg:#fafaf9;--bg2:#f5f5f4;--bg3:#eeeeec;
+    --border:rgba(0,0,0,.07);--border2:rgba(0,0,0,.13);
+    --text1:#18181b;--text2:#52525b;--text3:#a1a1aa;
+    --accent:#92701a;--red:#dc2626;--green:#16a34a;--blue:#2563eb;--orange:#ea580c;
+  }}
+  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+  html{font-size:16px;-webkit-text-size-adjust:100%}
+  body{background:var(--bg);color:var(--text1);font-family:var(--fb);line-height:1.6;min-height:100vh;-webkit-font-smoothing:antialiased}
+  .shell{max-width:860px;margin:0 auto;padding:0 20px 80px}
 
   /* Header */
-  .header {
-    padding: 40px 0 28px;
-    display: flex; align-items: flex-end; justify-content: space-between;
-    border-bottom: 1px solid var(--border); margin-bottom: 28px;
-  }
-  .header h1 {
-    font-family: var(--font-d); font-size: clamp(24px,5vw,34px);
-    font-weight: 400; font-style: italic; letter-spacing: -0.02em; line-height: 1.1;
-  }
-  .header .sub {
-    font-family: var(--font-m); font-size: 12px;
-    color: var(--text-tertiary); margin-top: 4px; letter-spacing: 0.03em;
-  }
-  .header-right { display: flex; flex-direction: column; align-items: flex-end; gap: 5px; }
-  .clock { font-family: var(--font-m); font-size: 12px; color: var(--text-tertiary); }
-  .dot {
-    display: flex; align-items: center; gap: 6px;
-    font-family: var(--font-m); font-size: 11px; color: var(--text-tertiary);
-  }
-  .dot::before {
-    content: ''; width: 6px; height: 6px; border-radius: 50%; background: var(--text-tertiary);
-  }
-  .dot.live::before { background: var(--green); box-shadow: 0 0 6px var(--green); }
-  .dot.spin::before { background: var(--accent); animation: blink 1.2s ease-in-out infinite; }
-  .dot.err::before { background: var(--red); }
-  @keyframes blink { 0%,100%{opacity:1} 50%{opacity:.2} }
+  .hdr{padding:40px 0 28px;display:flex;align-items:flex-end;justify-content:space-between;border-bottom:1px solid var(--border);margin-bottom:28px}
+  .hdr h1{font-family:var(--fd);font-size:clamp(24px,5vw,34px);font-weight:400;font-style:italic;letter-spacing:-.02em;line-height:1.1}
+  .hdr .sub{font-family:var(--fm);font-size:12px;color:var(--text3);margin-top:4px;letter-spacing:.03em}
+  .hdr-r{display:flex;flex-direction:column;align-items:flex-end;gap:5px}
+  .clk{font-family:var(--fm);font-size:12px;color:var(--text3)}
+  .dot{display:flex;align-items:center;gap:6px;font-family:var(--fm);font-size:11px;color:var(--text3)}
+  .dot::before{content:'';width:6px;height:6px;border-radius:50%;background:var(--text3)}
+  .dot.live::before{background:var(--green);box-shadow:0 0 6px var(--green)}
+  .dot.spin::before{background:var(--accent);animation:blink 1.2s ease-in-out infinite}
+  @keyframes blink{0%,100%{opacity:1}50%{opacity:.2}}
 
-  /* Priority Banner */
-  .banner {
-    background: linear-gradient(135deg, rgba(228,201,126,.09), rgba(228,201,126,.03));
-    border: 1px solid rgba(228,201,126,.22);
-    border-radius: var(--r); padding: 20px 24px; margin-bottom: 24px;
-    display: none; animation: fadeIn .4s ease;
-  }
-  .banner.on { display: block; }
-  .banner .blabel {
-    font-family: var(--font-m); font-size: 10px; letter-spacing: .12em;
-    text-transform: uppercase; color: var(--accent); margin-bottom: 6px;
-  }
-  .banner .baction { font-size: 19px; font-weight: 500; color: var(--text-primary); line-height: 1.35; }
-  .banner .breason { font-size: 13px; color: var(--text-secondary); margin-top: 5px; }
+  /* Banner */
+  .ban{background:linear-gradient(135deg,rgba(228,201,126,.09),rgba(228,201,126,.03));border:1px solid rgba(228,201,126,.22);border-radius:var(--r);padding:20px 24px;margin-bottom:24px;display:none;animation:fi .4s ease}
+  .ban.on{display:block}
+  .ban .bl{font-family:var(--fm);font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--accent);margin-bottom:6px}
+  .ban .ba{font-size:19px;font-weight:500;color:var(--text1);line-height:1.35}
+  .ban .br{font-size:13px;color:var(--text2);margin-top:5px}
 
   /* Stats */
-  .stats {
-    display: grid; grid-template-columns: repeat(4,1fr);
-    gap: 8px; margin-bottom: 24px; display: none;
-  }
-  .stats.on { display: grid; }
-  .stat {
-    background: var(--bg2); border: 1px solid var(--border);
-    border-radius: 10px; padding: 14px 12px; text-align: center;
-  }
-  .stat .n {
-    font-family: var(--font-m); font-size: 26px; line-height: 1; margin-bottom: 4px;
-  }
-  .stat .l { font-family: var(--font-m); font-size: 10px; color: var(--text-tertiary); letter-spacing: .04em; }
-  .stat.u .n { color: var(--red); }
-  .stat.p .n { color: var(--orange); }
-  .stat.i .n { color: var(--blue); }
-  .stat.d .n { color: var(--green); }
+  .sts{display:none;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:24px}
+  .sts.on{display:grid}
+  .st{background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:14px 12px;text-align:center}
+  .st .n{font-family:var(--fm);font-size:26px;line-height:1;margin-bottom:4px}
+  .st .l{font-family:var(--fm);font-size:10px;color:var(--text3);letter-spacing:.04em}
+  .st.u .n{color:var(--red)}.st.p .n{color:var(--orange)}.st.i .n{color:var(--blue)}.st.d .n{color:var(--green)}
 
-  /* Items */
-  .slabel {
-    font-family: var(--font-m); font-size: 10px; letter-spacing: .1em;
-    text-transform: uppercase; color: var(--text-tertiary); margin-bottom: 10px;
-  }
+  /* Section */
+  .sl{font-family:var(--fm);font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--text3);margin:20px 0 10px}
 
-  .card {
-    background: var(--bg2); border: 1px solid var(--border);
-    border-radius: var(--r); padding: 17px 20px; margin-bottom: 8px;
-    cursor: pointer; transition: border-color .15s, background .15s;
-    position: relative; overflow: hidden;
-    animation: fadeIn .3s ease;
-  }
-  .card::before {
-    content: ''; position: absolute; left: 0; top: 0; bottom: 0;
-    width: 3px; border-radius: 3px 0 0 3px;
-  }
-  .card.urgent::before { background: var(--red); }
-  .card.pending::before { background: var(--orange); }
-  .card.info::before { background: var(--blue); }
-  .card.done::before { background: var(--green); }
-  .card:hover { border-color: var(--border2); background: var(--bg3); }
-  .card.open { background: var(--bg3); border-color: var(--border2); }
+  /* Card */
+  .cd{background:var(--bg2);border:1px solid var(--border);border-radius:var(--r);padding:17px 20px;margin-bottom:8px;cursor:pointer;transition:border-color .15s,background .15s;position:relative;overflow:hidden;animation:fi .3s ease}
+  .cd::before{content:'';position:absolute;left:0;top:0;bottom:0;width:3px;border-radius:3px 0 0 3px}
+  .cd.decision::before{background:var(--red)}.cd.pending::before{background:var(--orange)}
+  .cd.info::before{background:var(--blue)}.cd.auto_done::before{background:var(--green)}
+  .cd:hover{border-color:var(--border2);background:var(--bg3)}
+  .cd.open{background:var(--bg3);border-color:var(--border2)}
+  .cd.auto_done{opacity:.6}
 
-  .card-head { display: flex; align-items: flex-start; gap: 11px; }
-  .tag {
-    font-family: var(--font-m); font-size: 10px; font-weight: 500;
-    letter-spacing: .07em; text-transform: uppercase;
-    padding: 2px 8px; border-radius: 4px; flex-shrink: 0; margin-top: 2px;
-  }
-  .tag.urgent { background: rgba(248,113,113,.12); color: var(--red); }
-  .tag.pending { background: rgba(251,146,60,.12); color: var(--orange); }
-  .tag.info { background: rgba(96,165,250,.12); color: var(--blue); }
-  .tag.done { background: rgba(74,222,128,.12); color: var(--green); }
+  .cd-h{display:flex;align-items:flex-start;gap:11px}
+  .tg{font-family:var(--fm);font-size:10px;font-weight:500;letter-spacing:.07em;text-transform:uppercase;padding:2px 8px;border-radius:4px;flex-shrink:0;margin-top:2px}
+  .tg.decision{background:rgba(248,113,113,.12);color:var(--red)}
+  .tg.pending{background:rgba(251,146,60,.12);color:var(--orange)}
+  .tg.info{background:rgba(96,165,250,.12);color:var(--blue)}
+  .tg.auto_done{background:rgba(74,222,128,.12);color:var(--green)}
 
-  .card-title { font-size: 15px; font-weight: 500; line-height: 1.4; flex: 1; }
-  .card-meta { display: flex; gap: 8px; margin-top: 5px; align-items: center; flex-wrap: wrap; }
-  .meta-date { font-family: var(--font-m); font-size: 11px; color: var(--text-tertiary); }
-  .meta-age {
-    font-family: var(--font-m); font-size: 10px; padding: 1px 6px;
-    border-radius: 4px; background: var(--bg3); color: var(--text-tertiary);
-  }
-  .meta-age.old { background: rgba(248,113,113,.09); color: var(--red); }
+  .cd-t{font-size:15px;font-weight:500;line-height:1.4;flex:1}
+  .cd-m{display:flex;gap:8px;margin-top:5px;align-items:center;flex-wrap:wrap}
+  .md{font-family:var(--fm);font-size:11px;color:var(--text3)}
+  .ma{font-family:var(--fm);font-size:10px;padding:1px 6px;border-radius:4px;background:var(--bg3);color:var(--text3)}
+  .ma.old{background:rgba(248,113,113,.09);color:var(--red)}
 
-  .chevron {
-    flex-shrink: 0; color: var(--text-tertiary);
-    transition: transform .2s; margin-top: 2px;
-  }
-  .card.open .chevron { transform: rotate(180deg); }
+  .chv{flex-shrink:0;color:var(--text3);transition:transform .2s;margin-top:2px}
+  .cd.open .chv{transform:rotate(180deg)}
 
-  .card-body {
-    display: none; margin-top: 14px; padding-top: 14px;
-    border-top: 1px solid var(--border);
-  }
-  .card.open .card-body { display: block; }
+  .cd-b{display:none;margin-top:14px;padding-top:14px;border-top:1px solid var(--border)}
+  .cd.open .cd-b{display:block}
 
-  .summary { font-size: 14px; color: var(--text-secondary); line-height: 1.75; margin-bottom: 12px; }
+  .sum{font-size:14px;color:var(--text2);line-height:1.75;margin-bottom:12px}
 
-  .todos { list-style: none; display: flex; flex-direction: column; gap: 6px; margin-bottom: 14px; }
-  .todos li { display: flex; gap: 8px; font-size: 13px; color: var(--text-secondary); align-items: flex-start; }
-  .todos li::before { content: '○'; color: var(--text-tertiary); font-size: 11px; margin-top: 2px; flex-shrink: 0; }
-  .todos li.done { color: var(--text-tertiary); text-decoration: line-through; }
-  .todos li.done::before { content: '●'; color: var(--green); }
+  /* Next Step */
+  .nxt{background:var(--bg);border:1px solid var(--border2);border-radius:8px;padding:12px 16px;margin-bottom:14px}
+  .nxt-label{font-family:var(--fm);font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--accent);margin-bottom:6px}
+  .nxt-text{font-size:14px;color:var(--text1);line-height:1.6}
 
-  .actions { display: flex; gap: 8px; flex-wrap: wrap; }
-  .abtn {
-    font-size: 12px; padding: 6px 12px; border-radius: 6px;
-    border: 1px solid var(--border); background: transparent;
-    color: var(--text-secondary); cursor: pointer; font-family: var(--font-b);
-    transition: all .15s;
-  }
-  .abtn:hover { border-color: var(--border2); color: var(--text-primary); }
-  .abtn.pri { background: var(--accent); color: #0a0a0b; border-color: var(--accent); }
-  .abtn.pri:hover { opacity: .85; }
+  /* Decision Options */
+  .opts{display:flex;flex-direction:column;gap:8px;margin-bottom:14px}
+  .opt{display:flex;align-items:stretch;border:1px solid var(--border);border-radius:10px;overflow:hidden;transition:border-color .2s;cursor:pointer}
+  .opt:hover{border-color:var(--accent)}
+  .opt.chosen{border-color:var(--green);background:rgba(74,222,128,.04)}
+  .opt-body{flex:1;padding:12px 16px}
+  .opt-label{font-size:14px;font-weight:500;color:var(--text1);margin-bottom:4px}
+  .opt-desc{font-size:13px;color:var(--text2);line-height:1.5;margin-bottom:6px}
+  .opt-pc{display:flex;gap:12px;font-size:11px;font-family:var(--fm)}
+  .opt-pro{color:var(--green)}.opt-con{color:var(--red)}
+  .opt-btn{display:flex;align-items:center;justify-content:center;width:48px;background:var(--bg3);color:var(--text3);font-size:13px;flex-shrink:0;transition:background .15s,color .15s;border-left:1px solid var(--border)}
+  .opt:hover .opt-btn{background:var(--accent);color:#0a0a0b}
+  .opt.chosen .opt-btn{background:var(--green);color:#0a0a0b}
+
+  /* Todos */
+  .tds{list-style:none;display:flex;flex-direction:column;gap:6px;margin-bottom:14px}
+  .tds li{display:flex;gap:8px;font-size:13px;color:var(--text2);align-items:flex-start}
+  .tds li::before{content:'○';color:var(--text3);font-size:11px;margin-top:2px;flex-shrink:0}
+  .tds li.dn{color:var(--text3);text-decoration:line-through}.tds li.dn::before{content:'●';color:var(--green)}
+
+  /* Actions */
+  .acts{display:flex;gap:8px;flex-wrap:wrap}
+  .ab{font-size:12px;padding:6px 12px;border-radius:6px;border:1px solid var(--border);background:transparent;color:var(--text2);cursor:pointer;font-family:var(--fb);transition:all .15s}
+  .ab:hover{border-color:var(--border2);color:var(--text1)}
+
+  /* Push Info */
+  .pi{background:var(--bg2);border:1px solid var(--border);border-radius:8px;padding:10px 16px;margin-bottom:20px;display:none;justify-content:space-between;align-items:center;font-family:var(--fm);font-size:11px;color:var(--text3)}
+  .pi.on{display:flex}
+
+  /* Refresh */
+  .rr{display:flex;justify-content:flex-end;margin-bottom:10px}
+  .rb{font-family:var(--fm);font-size:11px;padding:5px 12px;border-radius:6px;border:1px solid var(--border);background:transparent;color:var(--text3);cursor:pointer;transition:all .15s;letter-spacing:.04em}
+  .rb:hover{border-color:var(--border2);color:var(--text1)}
 
   /* Loading */
-  .loader { display: none; padding: 36px 0; }
-  .loader.on { display: block; }
-  .bar { height: 2px; background: var(--border); border-radius: 2px; overflow: hidden; margin-bottom: 14px; }
-  .bar-fill { height: 100%; background: var(--accent); animation: sweep 1.6s ease-in-out infinite; transform-origin: left; }
-  @keyframes sweep { 0%{transform:scaleX(0) translateX(0)} 50%{transform:scaleX(.6) translateX(50%)} 100%{transform:scaleX(0) translateX(200%)} }
-  .loader-text { font-family: var(--font-m); font-size: 12px; color: var(--text-tertiary); text-align: center; }
+  .ld{display:none;padding:36px 0}.ld.on{display:block}
+  .bar{height:2px;background:var(--border);border-radius:2px;overflow:hidden;margin-bottom:14px}
+  .bar-f{height:100%;background:var(--accent);animation:sw 1.6s ease-in-out infinite;transform-origin:left}
+  @keyframes sw{0%{transform:scaleX(0) translateX(0)}50%{transform:scaleX(.6) translateX(50%)}100%{transform:scaleX(0) translateX(200%)}}
+  .ld-t{font-family:var(--fm);font-size:12px;color:var(--text3);text-align:center}
 
   /* Empty */
-  .empty { text-align: center; padding: 56px 20px; color: var(--text-tertiary); }
-  .empty .ei { font-size: 36px; opacity: .35; margin-bottom: 14px; }
-  .empty p { font-size: 14px; line-height: 1.7; }
-  .empty code {
-    font-family: var(--font-m); font-size: 12px;
-    background: var(--bg2); padding: 2px 6px; border-radius: 4px;
-    color: var(--text-secondary);
-  }
-
-  /* Refresh btn */
-  .refresh-row {
-    display: flex; justify-content: flex-end; margin-bottom: 10px;
-  }
-  .rbtn {
-    font-family: var(--font-m); font-size: 11px; padding: 5px 12px;
-    border-radius: 6px; border: 1px solid var(--border); background: transparent;
-    color: var(--text-tertiary); cursor: pointer; transition: all .15s; letter-spacing: .04em;
-  }
-  .rbtn:hover { border-color: var(--border2); color: var(--text-primary); }
-
-  /* Last push info */
-  .push-info {
-    background: var(--bg2); border: 1px solid var(--border);
-    border-radius: 8px; padding: 10px 16px; margin-bottom: 20px;
-    display: flex; justify-content: space-between; align-items: center;
-    font-family: var(--font-m); font-size: 11px; color: var(--text-tertiary);
-    display: none;
-  }
-  .push-info.on { display: flex; }
+  .emp{text-align:center;padding:56px 20px;color:var(--text3)}
+  .emp .ei{font-size:36px;opacity:.35;margin-bottom:14px}.emp p{font-size:14px;line-height:1.7}
 
   /* Footer */
-  .footer {
-    margin-top: 60px; padding-top: 18px; border-top: 1px solid var(--border);
-    font-family: var(--font-m); font-size: 11px; color: var(--text-tertiary);
-    display: flex; justify-content: space-between;
-  }
+  .ftr{margin-top:60px;padding-top:18px;border-top:1px solid var(--border);font-family:var(--fm);font-size:11px;color:var(--text3);display:flex;justify-content:space-between}
 
   /* Toast */
-  .toast {
-    position: fixed; bottom: 24px; left: 50%;
-    transform: translateX(-50%) translateY(70px);
-    background: var(--bg3); border: 1px solid var(--border2);
-    border-radius: 8px; padding: 9px 18px; font-size: 13px;
-    color: var(--text-primary); transition: transform .28s cubic-bezier(.34,1.56,.64,1);
-    z-index: 999; white-space: nowrap; pointer-events: none;
-  }
-  .toast.on { transform: translateX(-50%) translateY(0); }
+  .tst{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(70px);background:var(--bg3);border:1px solid var(--border2);border-radius:8px;padding:9px 18px;font-size:13px;color:var(--text1);transition:transform .28s cubic-bezier(.34,1.56,.64,1);z-index:999;white-space:nowrap;pointer-events:none}
+  .tst.on{transform:translateX(-50%) translateY(0)}
 
-  @keyframes fadeIn { from{opacity:0;transform:translateY(6px)} to{opacity:1;transform:none} }
-
-  @media (max-width:600px) {
-    .header { flex-direction: column; align-items: flex-start; gap: 8px; padding: 28px 0 20px; }
-    .header-right { align-items: flex-start; }
-    .stats { grid-template-columns: repeat(2,1fr); }
-    .card { padding: 14px 16px; }
-    .card-title { font-size: 14px; }
+  @keyframes fi{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+  @media(max-width:600px){
+    .hdr{flex-direction:column;align-items:flex-start;gap:8px;padding:28px 0 20px}
+    .hdr-r{align-items:flex-start}.sts{grid-template-columns:repeat(2,1fr)}
+    .cd{padding:14px 16px}.cd-t{font-size:14px}
   }
 </style>
 </head>
 <body>
 <div class="shell">
-
-  <!-- Header -->
-  <div class="header">
-    <div>
-      <h1>指揮中心</h1>
-      <div class="sub">hermes · action_inbox · command center</div>
-    </div>
-    <div class="header-right">
-      <div class="clock" id="clock">—</div>
-      <div class="dot" id="dot">初始化</div>
-    </div>
+  <div class="hdr">
+    <div><h1>指揮中心</h1><div class="sub">hermes · command center · v3</div></div>
+    <div class="hdr-r"><div class="clk" id="clk">—</div><div class="dot" id="dot">初始化</div></div>
   </div>
-
-  <!-- Priority Banner -->
-  <div class="banner" id="banner">
-    <div class="blabel">🔴 現在最該做的</div>
-    <div class="baction" id="baction">—</div>
-    <div class="breason" id="breason"></div>
+  <div class="ban" id="ban"><div class="bl">🔴 現在最該做的</div><div class="ba" id="ba">—</div><div class="br" id="bbr"></div></div>
+  <div class="sts" id="sts">
+    <div class="st u"><div class="n" id="su">0</div><div class="l">需決策</div></div>
+    <div class="st p"><div class="n" id="sp">0</div><div class="l">進行中</div></div>
+    <div class="st i"><div class="n" id="si">0</div><div class="l">總項目</div></div>
+    <div class="st d"><div class="n" id="sd">0</div><div class="l">已完成</div></div>
   </div>
-
-  <!-- Stats -->
-  <div class="stats" id="stats">
-    <div class="stat u"><div class="n" id="su">0</div><div class="l">需決策</div></div>
-    <div class="stat p"><div class="n" id="sp">0</div><div class="l">進行中</div></div>
-    <div class="stat i"><div class="n" id="si">0</div><div class="l">總項目</div></div>
-    <div class="stat d"><div class="n" id="sd">0</div><div class="l">已完成</div></div>
-  </div>
-
-  <!-- Last push info -->
-  <div class="push-info" id="pushInfo">
-    <span id="pushFrom">Hermes 最後推送</span>
-    <span id="pushTime">—</span>
-  </div>
-
-  <!-- Refresh -->
-  <div class="refresh-row">
-    <button class="rbtn" onclick="fetchData()">↻ 刷新</button>
-  </div>
-
-  <!-- Loading -->
-  <div class="loader" id="loader">
-    <div class="bar"><div class="bar-fill"></div></div>
-    <div class="loader-text" id="loaderText">從 Hermes 讀取資料…</div>
-  </div>
-
-  <!-- Items -->
-  <div id="items">
-    <div class="empty" id="empty">
-      <div class="ei">◎</div>
-      <p>等待 Hermes 推送資料<br><br>
-        讓 Hermes 執行：<br>
-        <code>hermes skill push-dashboard</code><br><br>
-        或手動觸發一次</p>
-    </div>
-  </div>
-
-  <!-- Footer -->
-  <div class="footer">
-    <span>Hermes Command Center · v2.0</span>
-    <span id="lastFetch">—</span>
-  </div>
-
+  <div class="pi" id="pi"><span>Hermes 最後推送</span><span id="pt">—</span></div>
+  <div class="rr"><button class="rb" onclick="load()">↻ 刷新</button></div>
+  <div class="ld" id="ld"><div class="bar"><div class="bar-f"></div></div><div class="ld-t">讀取中…</div></div>
+  <div id="items"><div class="emp"><div class="ei">◎</div><p>等待 Hermes 推送資料</p></div></div>
+  <div class="ftr"><span>Hermes Command Center · v3.0</span><span id="lf">—</span></div>
 </div>
-
-<div class="toast" id="toast"></div>
-
+<div class="tst" id="tst"></div>
 <script>
-// ── 設定 ──
-// 部署後把這裡換成你的 Vercel 網址
-const API_BASE = window.location.origin;
-const REFRESH_INTERVAL = 5 * 60 * 1000; // 每5分鐘自動刷新
+const API = window.location.origin;
+function tick(){const n=new Date();document.getElementById('clk').textContent=n.toLocaleString('zh-TW',{weekday:'short',month:'short',day:'numeric',hour:'2-digit',minute:'2-digit',hour12:false}).replace(',',' ·')}
+tick();setInterval(tick,30000);
 
-// ── Clock ──
-function tick() {
-  const n = new Date();
-  document.getElementById('clock').textContent =
-    n.toLocaleString('zh-TW', { weekday:'short', month:'short', day:'numeric', hour:'2-digit', minute:'2-digit', hour12:false }).replace(',', ' ·');
-}
-tick(); setInterval(tick, 30000);
-
-// ── Fetch from API ──
-async function fetchData() {
-  setDot('spin', '讀取中');
-  setLoader(true, '從 Hermes 讀取最新資料…');
-
-  try {
-    const res = await fetch(`${API_BASE}/api/push`, { cache: 'no-store' });
-    const data = await res.json();
-
-    if (data.empty) {
-      setDot('', '等待推送');
-      setLoader(false);
-      return;
-    }
-
-    render(data);
-    setDot('live', '即時');
-    document.getElementById('lastFetch').textContent =
-      '讀取：' + new Date().toLocaleTimeString('zh-TW', { hour:'2-digit', minute:'2-digit' });
-
-  } catch (err) {
-    setDot('err', '連線失敗');
-    toast('無法連到 API：' + err.message);
-    console.error(err);
-  }
-
-  setLoader(false);
+async function load(){
+  setDot('spin','讀取中');
+  document.getElementById('ld').classList.add('on');
+  try{
+    const r=await fetch(`${API}/api/push`,{cache:'no-store'});
+    const d=await r.json();
+    if(d.empty){setDot('','等待推送');document.getElementById('ld').classList.remove('on');return}
+    render(d);setDot('live','即時');
+    document.getElementById('lf').textContent='讀取：'+new Date().toLocaleTimeString('zh-TW',{hour:'2-digit',minute:'2-digit'});
+  }catch(e){setDot('err','連線失敗');toast('連線失敗：'+e.message)}
+  document.getElementById('ld').classList.remove('on');
 }
 
-// ── Render ──
-function render(data) {
-  // Banner
-  if (data.priority_action) {
-    document.getElementById('baction').textContent = data.priority_action.title || '—';
-    document.getElementById('breason').textContent = data.priority_action.reason || '';
-    document.getElementById('banner').classList.add('on');
+function render(d){
+  if(d.priority_action){
+    document.getElementById('ba').textContent=d.priority_action.title||'—';
+    document.getElementById('bbr').textContent=d.priority_action.reason||'';
+    document.getElementById('ban').classList.add('on');
+  }
+  const s=d.stats||{};
+  document.getElementById('su').textContent=s.urgent||0;
+  document.getElementById('sp').textContent=s.pending||0;
+  document.getElementById('si').textContent=s.total||0;
+  document.getElementById('sd').textContent=s.done||0;
+  document.getElementById('sts').classList.add('on');
+  if(d.pushed_at){
+    const t=new Date(d.pushed_at);
+    document.getElementById('pt').textContent=t.toLocaleString('zh-TW',{month:'short',day:'numeric',hour:'2-digit',minute:'2-digit',hour12:false});
+    document.getElementById('pi').classList.add('on');
   }
 
-  // Stats
-  const s = data.stats || {};
-  document.getElementById('su').textContent = s.urgent || 0;
-  document.getElementById('sp').textContent = s.pending || 0;
-  document.getElementById('si').textContent = s.total || 0;
-  document.getElementById('sd').textContent = s.done || 0;
-  document.getElementById('stats').classList.add('on');
+  const el=document.getElementById('items');
+  if(!d.items||!d.items.length){el.innerHTML='<div class="emp"><div class="ei">✓</div><p>沒有待處理項目</p></div>';return}
 
-  // Push info
-  if (data.pushed_at) {
-    const t = new Date(data.pushed_at);
-    document.getElementById('pushTime').textContent =
-      t.toLocaleString('zh-TW', { month:'short', day:'numeric', hour:'2-digit', minute:'2-digit', hour12:false });
-    document.getElementById('pushInfo').classList.add('on');
-  }
+  // 分組
+  const decisions=d.items.filter(i=>i.type==='decision');
+  const pending=d.items.filter(i=>i.type==='pending');
+  const info=d.items.filter(i=>i.type==='info');
+  const done=d.items.filter(i=>i.type==='auto_done');
 
-  // Items
-  const el = document.getElementById('items');
-  if (!data.items || !data.items.length) {
-    el.innerHTML = '<div class="empty"><div class="ei">✓</div><p>沒有待辦項目</p></div>';
-    return;
-  }
+  let html='';
+  if(decisions.length) html+=`<div class="sl">⚡ 需要你決策（${decisions.length}）</div>`+decisions.map(renderCard).join('');
+  if(pending.length) html+=`<div class="sl">🔄 進行中（${pending.length}）</div>`+pending.map(renderCard).join('');
+  if(info.length) html+=`<div class="sl">📌 通知（${info.length}）</div>`+info.map(renderCard).join('');
+  if(done.length) html+=`<div class="sl">✓ 已完成（${done.length}）</div>`+done.map(renderCard).join('');
 
-  el.innerHTML = '<div class="slabel">報告列表</div>';
-  data.items.forEach(item => {
-    const age = getAge(item.date);
-    const div = document.createElement('div');
-    div.className = `card ${item.type || 'info'}`;
-    div.innerHTML = `
-      <div class="card-head">
-        <span class="tag ${item.type || 'info'}">${tagLabel(item.type)}</span>
-        <div style="flex:1">
-          <div class="card-title">${esc(item.title)}</div>
-          <div class="card-meta">
-            ${item.date ? `<span class="meta-date">${item.date}</span>` : ''}
-            ${age !== null ? `<span class="meta-age ${age > 5 ? 'old' : ''}">${age}天前</span>` : ''}
-            ${item.source_file ? `<span class="meta-date">${esc(item.source_file)}</span>` : ''}
-          </div>
-        </div>
-        <svg class="chevron" width="16" height="16" viewBox="0 0 16 16" fill="none">
-          <path d="M4 6l4 4 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
-        </svg>
-      </div>
-      <div class="card-body">
-        <div class="summary">${esc(item.summary || '')}</div>
-        ${renderTodos(item.todos)}
-        <div class="actions">
-          <button class="abtn pri" onclick="event.stopPropagation();copyText('${escJs((item.title||'') + '\n' + (item.summary||''))}')">複製摘要</button>
-          ${item.next_step ? `<button class="abtn" onclick="event.stopPropagation();copyText('${escJs(item.next_step)}')">複製下一步</button>` : ''}
-        </div>
-      </div>
-    `;
-    div.addEventListener('click', () => {
-      const isOpen = div.classList.contains('open');
-      document.querySelectorAll('.card').forEach(c => c.classList.remove('open'));
-      if (!isOpen) div.classList.add('open');
+  el.innerHTML=html;
+  el.querySelectorAll('.cd').forEach(c=>{
+    c.addEventListener('click',e=>{
+      if(e.target.closest('.opt')||e.target.closest('.ab'))return;
+      const isO=c.classList.contains('open');
+      el.querySelectorAll('.cd').forEach(x=>x.classList.remove('open'));
+      if(!isO)c.classList.add('open');
     });
-    el.appendChild(div);
   });
 }
 
-function renderTodos(todos) {
-  if (!todos || !todos.length) return '';
-  return `<ul class="todos">${todos.map(t =>
-    `<li class="${t.done ? 'done' : ''}">${esc(t.text)}</li>`
-  ).join('')}</ul>`;
+function renderCard(item){
+  const age=getAge(item.date);
+  const typeLabels={decision:'需決策',pending:'進行中',info:'通知',auto_done:'已完成'};
+  return `<div class="cd ${item.type||'info'}">
+    <div class="cd-h">
+      <span class="tg ${item.type||'info'}">${typeLabels[item.type]||item.type}</span>
+      <div style="flex:1">
+        <div class="cd-t">${esc(item.title)}</div>
+        <div class="cd-m">
+          ${item.date?`<span class="md">${item.date}</span>`:''}
+          ${age!==null?`<span class="ma ${age>5?'old':''}">${age}天前</span>`:''}
+          ${item.source_file?`<span class="md">${esc(item.source_file)}</span>`:''}
+        </div>
+      </div>
+      <svg class="chv" width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M4 6l4 4 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+    </div>
+    <div class="cd-b">
+      <div class="sum">${esc(item.summary||'')}</div>
+      ${item.next_step?`<div class="nxt"><div class="nxt-label">👉 下一步</div><div class="nxt-text">${esc(item.next_step)}</div></div>`:''}
+      ${item.type==='decision'&&item.options?renderOptions(item):''}
+      ${renderTodos(item.todos)}
+      <div class="acts">
+        <button class="ab" onclick="event.stopPropagation();copyTxt(\`${escJs(item.title+'\\n'+(item.summary||'')+'\\n'+(item.next_step||''))}\`)">複製摘要</button>
+      </div>
+    </div>
+  </div>`;
 }
 
-const tagMap = { urgent:'需決策', pending:'進行中', info:'通知', done:'完成' };
-function tagLabel(t) { return tagMap[t] || t || '—'; }
-
-function getAge(d) {
-  if (!d) return null;
-  const dt = new Date(d);
-  if (isNaN(dt)) return null;
-  return Math.floor((Date.now() - dt) / 86400000);
+function renderOptions(item){
+  if(!item.options||!item.options.length)return'';
+  return `<div class="sl" style="margin-top:0">選一個方案：</div><div class="opts">${item.options.map(o=>`
+    <div class="opt" onclick="event.stopPropagation();pickOption('${esc(item.id)}','${esc(o.id)}','${escJs(item.title)}',this)">
+      <div class="opt-body">
+        <div class="opt-label">${esc(o.label)}</div>
+        <div class="opt-desc">${esc(o.description)}</div>
+        <div class="opt-pc">
+          ${o.pros?`<span class="opt-pro">✓ ${esc(o.pros)}</span>`:''}
+          ${o.cons?`<span class="opt-con">✗ ${esc(o.cons)}</span>`:''}
+        </div>
+      </div>
+      <div class="opt-btn">→</div>
+    </div>
+  `).join('')}</div>`;
 }
 
-function esc(s) {
-  return String(s || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
-}
-function escJs(s) { return String(s||'').replace(/`/g,'\\`').replace(/\$/g,'\\$').replace(/'/g,"\\'"); }
-
-function copyText(t) {
-  navigator.clipboard.writeText(t).then(() => toast('已複製 ✓'));
-}
-
-// ── UI helpers ──
-function setLoader(show, text) {
-  document.getElementById('loader').classList.toggle('on', show);
-  if (text) document.getElementById('loaderText').textContent = text;
-}
-
-function setDot(cls, label) {
-  const d = document.getElementById('dot');
-  d.className = 'dot' + (cls ? ' ' + cls : '');
-  d.textContent = label;
+async function pickOption(itemId,optId,title,el){
+  el.closest('.opts').querySelectorAll('.opt').forEach(o=>o.classList.remove('chosen'));
+  el.classList.add('chosen');
+  try{
+    const r=await fetch(`${API}/api/decisions`,{
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({item_id:itemId,option_id:optId,item_title:title})
+    });
+    const d=await r.json();
+    if(d.ok) toast('已送出決策 ✓ Hermes 會自動執行');
+    else toast('送出失敗：'+JSON.stringify(d));
+  }catch(e){toast('送出失敗：'+e.message)}
 }
 
-let toastTimer;
-function toast(msg) {
-  const t = document.getElementById('toast');
-  t.textContent = msg;
-  t.classList.add('on');
-  clearTimeout(toastTimer);
-  toastTimer = setTimeout(() => t.classList.remove('on'), 2600);
+function renderTodos(todos){
+  if(!todos||!todos.length)return'';
+  return `<ul class="tds">${todos.map(t=>`<li class="${t.done?'dn':''}">${esc(t.text)}</li>`).join('')}</ul>`;
 }
 
-// ── Init ──
-fetchData();
-setInterval(fetchData, REFRESH_INTERVAL);
+function getAge(d){if(!d)return null;const dt=new Date(d);if(isNaN(dt))return null;return Math.floor((Date.now()-dt)/864e5)}
+function esc(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;')}
+function escJs(s){return String(s||'').replace(/`/g,'\\`').replace(/\$/g,'\\$').replace(/'/g,"\\'")}
+function copyTxt(t){navigator.clipboard.writeText(t).then(()=>toast('已複製 ✓'))}
+function setDot(c,l){const d=document.getElementById('dot');d.className='dot'+(c?' '+c:'');d.textContent=l}
+let tt;function toast(m){const t=document.getElementById('tst');t.textContent=m;t.classList.add('on');clearTimeout(tt);tt=setTimeout(()=>t.classList.remove('on'),2600)}
+load();setInterval(load,5*60*1000);
 </script>
 </body>
 </html>

@@ -1,138 +1,125 @@
----
-name: push-dashboard
-description: 每天 08:00 自動執行，或手動觸發（push dashboard / 推送儀表板 / 更新指揮中心）。讀取 action_inbox → Claude API 分析成白話 JSON → 推送到 Vercel Dashboard。
-triggers:
-  - push dashboard
-  - 推送儀表板
-  - 更新指揮中心
-  - 每天 08:00
----
-
 # push-dashboard SKILL
 # Hermes 讀取 action_inbox → 分析 → 推送到指揮中心
 
 ## 觸發條件
-- 每天 08:00 自動執行
-- 手動指令：`push dashboard` / `推送儀表板` / 更新指揮中心`
-- **⚡ 自動觸發：每次 Hermes 把報告或 handoff 寫入 `action_inbox/` 資料夾後，立即執行一次推送**
+- 每次寫入 action_inbox/ 新檔案後自動執行
+- 手動指令：`push dashboard` / `推送儀表板` / `更新指揮中心`
 
-### 自動觸發規則
-當 Hermes 執行以下任何操作後，**必須**自動觸發 push-dashboard：
-1. 新增 .md 檔案到 `00_TO_SORT/action_inbox/`
-2. 修改現有的 action_inbox .md 檔案
-3. 產生 handoff 文件或任務報告並寫入 action_inbox
+## 核心原則
+1. **可以自動做的，Hermes 直接做，不要問人**
+2. **需要人類決策的，給 2-3 個選項讓人選**
+3. **人選完後，Hermes 直接執行，不要再確認**
+4. **只有真正需要人類判斷的才打斷**
 
-**不需要等定時排程，寫完立刻推。**
+## Step 1：讀取 action_inbox
 
-## 執行步驟
-
-### Step 1：讀取所有 action_inbox 檔案
 ```bash
 find ~/Library/Mobile\ Documents/com~apple~CloudDocs/AI_WORKSPACE/00_TO_SORT/action_inbox -name "*.md" | sort
 ```
 
-把所有 .md 內容合併成一個字串，檔案之間用 `---` 分隔，每個檔案前加 `# 檔案: {filename}` 標頭。
+## Step 2：分析（用你的主控模型，不用 Claude API）
 
-### Step 2：本地分析成白話 JSON
-不用 Claude API，直接在本地用 Python 分析。參考 `references/analysis_prompt.md` 中的 prompt 結構。
+分析所有 .md 內容，輸出嚴格 JSON：
 
-輸出 JSON 格式：
 ```json
 {
-  "updated_at": "ISO timestamp",
-  "total_inbox": N,
-  "summary": "一句話總結",
+  "pushed_at": "ISO時間",
+  "priority_action": {
+    "title": "現在最該做的一件事（白話，15字以內）",
+    "reason": "為什麼（15字以內）"
+  },
+  "stats": {
+    "urgent": 0,
+    "pending": 0,
+    "total": 0,
+    "done": 0
+  },
   "items": [
     {
-      "id": "唯一ID",
+      "id": "唯一ID（用檔名簡化）",
+      "type": "decision | auto_done | pending | info",
+      "title": "白話標題（不准出現技術術語）",
       "date": "YYYY-MM-DD",
-      "title": "這份報告在說什麼（白話，20字以內）",
-      "status": "待決定|待續|待辦|部分完成|已完成|等待決定|待設定|待處理|待完成|待驗證",
-      "description": "2-3句白話，30秒內能懂",
-      "next_step": "下一個最小行動"
+      "summary": "這份報告在說什麼，用跟朋友聊天的語氣說（2句話以內）",
+      "next_step": "具體到可以直接做的動作。不是'完成測試'而是'打開終端機輸入 hermes test routing'",
+      "source_file": "原始檔名",
+      "todos": [
+        { "text": "待辦（白話）", "done": false }
+      ],
+      "options": null
     }
   ]
 }
 ```
 
-排序：urgent → pending → info → done
+### type 判斷邏輯
 
-### Step 3：POST 到指揮中心 API
-```bash
-curl -s -X POST https://hermes-dashboard-jade.vercel.app/api/push \
-  -H "Content-Type: application/json" \
-  -d @/tmp/dashboard_payload.json
-```
+| type | 什麼時候用 | 儀表板呈現 |
+|------|-----------|-----------|
+| `decision` | 有多條路可以走，必須人類選 | 顯示 2-3 個選項按鈕 |
+| `auto_done` | Hermes 可以自己做 / 已經做完的 | 灰色，標記完成 |
+| `pending` | 正在進行，有具體下一步 | 橘色，顯示下一步動作 |
+| `info` | 只是通知，不需要任何行動 | 藍色，最低優先 |
 
-## 部署注意事項
-- Vercel **不會**自動從 GitHub 拉最新 commit
-- 每次改完 `api/push.js` 必須手動部署：`vercel --prod`
-- 部署前確認 Vercel 環境變數有 `UPSTASH_REDIS_REST_URL` 和 `UPSTASH_REDIS_REST_TOKEN`
+### decision 類型的 options 格式
 
-## ⚠️ Upstash Redis 已知陷阱
-
-> 完整 API 使用細節見 `references/upstash-redis.md`
-
-### 陷阱 1：Double JSON.stringify
-**症狀**：GET 回傳的 JSON 是字串而非物件，`data.items` 為 undefined，前端顯示「沒有待辦項目」。
-
-**原因**：呼叫 `redisSet(key, JSON.stringify(payload))` 時，value 已是字串，但 function 內部又包了一次 `JSON.stringify(value)`，導致存進 Redis 的是 double-stringified 字串。
-
-**修正**：`redisSet` 判斷 value 型別，字串直接傳、物件才 stringify：
-```javascript
-async function redisSet(key, value) {
-  const body = typeof value === 'string' ? value : JSON.stringify(value);
-  const r = await fetch(`${REDIS_URL}/set/${key}`, {
-    method: 'POST',
-    headers: { Authorization: `Bearer ${REDIS_TOKEN}`, 'Content-Type': 'text/plain' },
-    body
-  });
-  return r.json();
+```json
+{
+  "options": [
+    {
+      "id": "opt-a",
+      "label": "選項名稱（5字以內）",
+      "description": "這個選項會怎樣（白話，20字以內）",
+      "pros": "好處（10字以內）",
+      "cons": "壞處（10字以內）"
+    }
+  ]
 }
 ```
 
-### 陷阱 2：Upstash GET 回傳 byte array
-**症狀**：`data.result` 是數字陣列（byte array）而非字串。
+### 白話翻譯規則（最重要）
 
-**修正**：`redisGet` 處理 byte array：
-```javascript
-async function redisGet(key) {
-  const r = await fetch(`${REDIS_URL}/get/${key}`, {
-    headers: { Authorization: `Bearer ${REDIS_TOKEN}` }
-  });
-  const data = await r.json();
-  let val = data.result;
-  if (Array.isArray(val)) {
-    val = new TextDecoder().decode(new Uint8Array(val));
-  }
-  return val;
-}
-```
+**禁止出現的詞：**
+cron, sync, script, routing, endpoint, API, deploy, commit, push, pull,
+terminal, SSH, config, webhook, token, schema, database, migration
 
-### 驗證方式
-每次部署後，先 POST 測試資料再刷新頁面：
+**替代方式：**
+- cron job → 定時自動任務
+- sync script → 同步程式
+- routing → 訊息分流
+- endpoint → 網址
+- deploy → 上線
+- commit/push → 更新到 GitHub
+- terminal → 終端機
+- SSH → 遠端連線到桌電
+- config → 設定
+- webhook → 自動通知
+- token → 密鑰
+- schema → 欄位結構
+
+**next_step 必須包含：**
+1. 在哪裡做（打開什麼 app / 網頁 / 終端機）
+2. 做什麼動作（輸入什麼 / 點什麼 / 看什麼）
+3. 預估花多少時間
+
+## Step 3：POST 到指揮中心
+
 ```bash
-curl -s -X POST https://your-app.vercel.app/api/push \
+curl -X POST https://hermes-dashboard-jade.vercel.app/api/push \
   -H "Content-Type: application/json" \
-  -d '{"test":true,"items":[{"id":"t","type":"urgent","title":"測試","date":"2026-01-01","summary":"test","todos":[],"source_file":"t.md"}],"stats":{"urgent":1,"pending":0,"total":1,"done":0},"priority_action":{"title":"測試","reason":"test"}}'
-# 再 GET 確認回傳正確 JSON（不是字串）
-curl -s https://your-app.vercel.app/api/push | python3 -m json.tool | head -5
+  -d '上面的 JSON'
 ```
 
-## Cron 設定
-```
-# 每天 08:00 自動推送
-0 8 * * *
+## Step 4：處理使用者的決策回覆
+
+定期檢查（每 5 分鐘，或綁在現有的 mailbox watcher 裡）：
+
+```bash
+curl -s https://hermes-dashboard-jade.vercel.app/api/decisions
 ```
 
-## 環境變數
-| 變數 | 說明 |
-|------|------|
-| `UPSTASH_REDIS_REST_URL` | Upstash Redis REST URL（Vercel 環境變數） |
-| `UPSTASH_REDIS_REST_TOKEN` | Upstash Redis REST Token（Vercel 環境變數） |
-| `HERMES_SECRET` | 推送密鑰，選填 |
-
-## 輸出範例
-```
-✅ 指揮中心已更新 — 完成 Telegram routing 端到端測試
-```
+如果有未處理的決策：
+1. 讀取使用者選了什麼
+2. 直接執行對應的行動
+3. 執行完後重新推送一次 dashboard
+4. 不要回去問使用者確認
