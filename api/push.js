@@ -27,7 +27,12 @@ export default async function handler(req, res) {
       headers: { Authorization: `Bearer ${REDIS_TOKEN}` }
     });
     const data = await r.json();
-    return data.result;
+    let val = data.result;
+    // Upstash 有時回傳 byte array，轉回字串
+    if (Array.isArray(val)) {
+      val = new TextDecoder().decode(new Uint8Array(val));
+    }
+    return val;
   }
 
   // ── POST：Hermes 推送 ──
